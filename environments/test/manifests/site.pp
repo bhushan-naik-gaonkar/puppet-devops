@@ -1,6 +1,6 @@
 node "test-site" {
 
-  file { ['/var/www']:
+  file { ['/var/www', '/var/www/test-app', '/var/www/test-app/current', '/var/www/test-app/releases', '/var/www/test-app/shared']:
     ensure => 'directory',
     owner   => root,
     group   => root,
@@ -9,7 +9,7 @@ node "test-site" {
 
   file {'/var/www/test-app/current/index.html':
     ensure => 'file',
-    content => 'This is a sample app.',
+    content => 'This is a sample app. created by BG',
     owner   => root,
     group   => root,
     mode    => '755'
@@ -17,9 +17,14 @@ node "test-site" {
 
   class { 'nginx':
     client_max_body_size => '512M',
-  }
+    }
 
   # NGINX Configuration
+   #Added by BG, in order to work virtual host
+  file { '/etc/nginx/conf.d/default.conf':
+  ensure  => 'absent',
+}
+
   file { '/etc/nginx/ssl':
     ensure => directory,
     owner => 'root',
